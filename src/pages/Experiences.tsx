@@ -1,30 +1,9 @@
-import { useEffect, useRef } from "react";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Briefcase, GraduationCap, Code, Users, Award } from "lucide-react";
 
 const Experiences = () => {
-  const timelineRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("animate-fade-in-up");
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    const elements = timelineRef.current?.querySelectorAll(".timeline-item");
-    elements?.forEach((el) => observer.observe(el));
-
-    return () => observer.disconnect();
-  }, []);
 
   const skills = {
     languages: ["Python", "JavaScript", "TypeScript", "HTML", "CSS", "C++", "SQL"],
@@ -206,57 +185,47 @@ const Experiences = () => {
             </div>
           </section>
 
-          {/* Projects Timeline Section */}
-          <section className="mb-20" ref={timelineRef}>
+          {/* Projects Section */}
+          <section className="mb-20">
             <div className="flex items-center gap-3 mb-8">
               <Code className="text-primary" size={32} />
               <h2 className="text-3xl font-bold">Projects</h2>
             </div>
-            <div className="relative">
-              {/* Timeline Line */}
-              <div className="absolute left-0 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-accent to-primary"></div>
-
-              {/* Timeline Items */}
-              <div className="space-y-12">
-                {projects.map((project, index) => (
-                  <div
-                    key={index}
-                    className={`timeline-item opacity-0 relative ${
-                      index % 2 === 0 ? "md:pr-1/2 md:text-right" : "md:pl-1/2 md:ml-8"
-                    }`}
-                  >
-                    {/* Timeline Dot */}
-                    <div className="absolute left-0 md:left-1/2 top-8 w-4 h-4 bg-primary rounded-full border-4 border-background transform md:-translate-x-1/2 glow"></div>
-
-                    <Card className="p-6 bg-card border-border hover:border-primary/50 transition-all hover:glow ml-8 md:ml-0">
-                      <div className="flex flex-col gap-4">
-                        <div>
-                          <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-2">
-                            <h3 className="text-2xl font-bold gradient-text-alt">{project.title}</h3>
-                            <span className="text-sm text-muted-foreground">{project.period}</span>
-                          </div>
-                          <p className="text-foreground/80 mb-4">{project.description}</p>
+            <div className="space-y-8">
+              {projects.map((project, index) => (
+                <div
+                  key={index}
+                  className="relative animate-fade-in-up"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
+                  <Card className="p-6 bg-card border-border hover:border-primary/50 transition-all hover:glow">
+                    <div className="flex flex-col gap-4">
+                      <div>
+                        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-2">
+                          <h3 className="text-2xl font-bold gradient-text-alt">{project.title}</h3>
+                          <span className="text-sm text-muted-foreground">{project.period}</span>
                         </div>
-                        <div className="flex flex-wrap gap-2">
-                          {project.technologies.map((tech) => (
-                            <Badge key={tech} className="bg-primary/20 text-primary border-primary/30">
-                              {tech}
-                            </Badge>
-                          ))}
-                        </div>
-                        <ul className="space-y-2">
-                          {project.highlights.map((highlight, i) => (
-                            <li key={i} className="text-sm text-foreground/70 flex items-start gap-2">
-                              <span className="text-accent mt-1">▹</span>
-                              <span>{highlight}</span>
-                            </li>
-                          ))}
-                        </ul>
+                        <p className="text-foreground/80 mb-4">{project.description}</p>
                       </div>
-                    </Card>
-                  </div>
-                ))}
-              </div>
+                      <div className="flex flex-wrap gap-2">
+                        {project.technologies.map((tech) => (
+                          <Badge key={tech} className="bg-primary/20 text-primary border-primary/30">
+                            {tech}
+                          </Badge>
+                        ))}
+                      </div>
+                      <ul className="space-y-2">
+                        {project.highlights.map((highlight, i) => (
+                          <li key={i} className="text-sm text-foreground/70 flex items-start gap-2">
+                            <span className="text-accent mt-1">▹</span>
+                            <span>{highlight}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </Card>
+                </div>
+              ))}
             </div>
           </section>
 
@@ -291,8 +260,6 @@ const Experiences = () => {
           </section>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 };

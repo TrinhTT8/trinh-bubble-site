@@ -1,6 +1,5 @@
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -189,8 +188,6 @@ const Contact = () => {
           </div>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 };

@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Github, Linkedin, Mail, Phone } from "lucide-react";
 import FloatingBubbles from "@/components/FloatingBubbles";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 
 const Index = () => {
@@ -86,8 +85,6 @@ const Index = () => {
           </div>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 };
