@@ -7,6 +7,8 @@ interface Bubble {
   vx: number;
   vy: number;
   color: string;
+  isPopping: boolean;
+  popFrames: number;
 }
 
 const FloatingBubbles = () => {
@@ -36,7 +38,8 @@ const FloatingBubbles = () => {
       "rgba(236, 72, 153, 0.15)", // Pink
     ];
 
-    for (let i = 0; i < 8; i++) {
+    // Function to add a new bubble
+    const addBubble = () => {
       bubbles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
@@ -44,24 +47,60 @@ const FloatingBubbles = () => {
         vx: (Math.random() - 0.5) * 1.5,
         vy: (Math.random() - 0.5) * 1.5,
         color: colors[Math.floor(Math.random() * colors.length)],
+        isPopping: false,
+        popFrames: 0,
       });
+    };
+
+    for (let i = 0; i < 8; i++) {
+      addBubble();
     }
+
+    // Handle click to pop bubbles
+    const handleClick = (event: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      const clickX = event.clientX - rect.left;
+      const clickY = event.clientY - rect.top;
+
+      bubbles.forEach((bubble) => {
+        const distance = Math.sqrt((clickX - bubble.x) ** 2 + (clickY - bubble.y) ** 2);
+        if (distance < bubble.radius && !bubble.isPopping) {
+          bubble.isPopping = true;
+          bubble.popFrames = 10; // Number of frames for popping animation
+        }
+      });
+    };
+
+    canvas.addEventListener("click", handleClick);
 
     // Animation loop
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      bubbles.forEach((bubble) => {
-        // Update position
-        bubble.x += bubble.vx;
-        bubble.y += bubble.vy;
+      for (let i = bubbles.length - 1; i >= 0; i--) {
+        const bubble = bubbles[i];
 
-        // Bounce off edges
-        if (bubble.x + bubble.radius > canvas.width || bubble.x - bubble.radius < 0) {
-          bubble.vx *= -1;
-        }
-        if (bubble.y + bubble.radius > canvas.height || bubble.y - bubble.radius < 0) {
-          bubble.vy *= -1;
+        if (bubble.isPopping) {
+          bubble.popFrames--;
+          bubble.radius *= 0.9; // Shrink radius
+          if (bubble.popFrames <= 0) {
+            bubbles.splice(i, 1); // Remove bubble after animation
+            // Add a new bubble to maintain count
+            addBubble();
+            continue;
+          }
+        } else {
+          // Update position
+          bubble.x += bubble.vx;
+          bubble.y += bubble.vy;
+
+          // Bounce off edges
+          if (bubble.x + bubble.radius > canvas.width || bubble.x - bubble.radius < 0) {
+            bubble.vx *= -1;
+          }
+          if (bubble.y + bubble.radius > canvas.height || bubble.y - bubble.radius < 0) {
+            bubble.vy *= -1;
+          }
         }
 
         // Draw bubble with glow
@@ -86,7 +125,7 @@ const FloatingBubbles = () => {
         ctx.strokeStyle = bubble.color.replace("0.15", "0.3");
         ctx.lineWidth = 2;
         ctx.stroke();
-      });
+      }
 
       requestAnimationFrame(animate);
     };
@@ -95,13 +134,14 @@ const FloatingBubbles = () => {
 
     return () => {
       window.removeEventListener("resize", resizeCanvas);
+      canvas.removeEventListener("click", handleClick);
     };
   }, []);
 
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 pointer-events-none z-0"
+      className="fixed inset-0 z-0"
       style={{ mixBlendMode: "screen" }}
     />
   );
