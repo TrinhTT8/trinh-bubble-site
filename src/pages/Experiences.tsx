@@ -1,4 +1,5 @@
 import Navbar from "@/components/Navbar";
+import ExperienceBubbles from "@/components/ExperienceBubbles";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Briefcase, GraduationCap, Code, Users, Award } from "lucide-react";
@@ -146,117 +147,49 @@ const Experiences = () => {
 
           {/* Work Experience Section */}
           <section className="mb-20">
-            <div className="flex items-center gap-3 mb-8">
-              <Briefcase className="text-accent" size={32} />
-              <h2 className="text-3xl font-bold">Work Experience</h2>
-            </div>
-            <div className="space-y-6">
-              {workExperience.map((exp, index) => {
-                const Icon = exp.icon;
-                return (
-                  <Card
-                    key={index}
-                    className="p-6 bg-card border-border hover:border-primary/50 transition-all hover:glow"
-                  >
-                    <div className="flex items-start gap-4">
-                      <div className="p-3 bg-primary/10 rounded-lg">
-                        <Icon className="text-primary" size={24} />
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-2">
-                          <h3 className="text-xl font-semibold">{exp.role}</h3>
-                          <span className="text-sm text-muted-foreground">{exp.period}</span>
-                        </div>
-                        <p className="text-accent font-medium mb-1">{exp.company}</p>
-                        <p className="text-sm text-muted-foreground mb-4">{exp.location}</p>
-                        <ul className="space-y-2">
-                          {exp.description.map((item, i) => (
-                            <li key={i} className="text-sm text-foreground/80 flex items-start gap-2">
-                              <span className="text-primary mt-1">▹</span>
-                              <span>{item}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                  </Card>
-                );
-              })}
-            </div>
+            <ExperienceBubbles
+              items={workExperience.map(exp => ({
+                title: exp.role,
+                subtitle: exp.company,
+                period: exp.period,
+                description: exp.description,
+                location: exp.location,
+                icon: exp.icon,
+              }))}
+              title="Work Experience"
+              icon={Briefcase}
+            />
           </section>
 
           {/* Projects Section */}
           <section className="mb-20">
-            <div className="flex items-center gap-3 mb-8">
-              <Code className="text-primary" size={32} />
-              <h2 className="text-3xl font-bold">Projects</h2>
-            </div>
-            <div className="space-y-8">
-              {projects.map((project, index) => (
-                <div
-                  key={index}
-                  className="relative animate-fade-in-up"
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                  <Card className="p-6 bg-card border-border hover:border-primary/50 transition-all hover:glow">
-                    <div className="flex flex-col gap-4">
-                      <div>
-                        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-2">
-                          <h3 className="text-2xl font-bold gradient-text-alt">{project.title}</h3>
-                          <span className="text-sm text-muted-foreground">{project.period}</span>
-                        </div>
-                        <p className="text-foreground/80 mb-4">{project.description}</p>
-                      </div>
-                      <div className="flex flex-wrap gap-2">
-                        {project.technologies.map((tech) => (
-                          <Badge key={tech} className="bg-primary/20 text-primary border-primary/30">
-                            {tech}
-                          </Badge>
-                        ))}
-                      </div>
-                      <ul className="space-y-2">
-                        {project.highlights.map((highlight, i) => (
-                          <li key={i} className="text-sm text-foreground/70 flex items-start gap-2">
-                            <span className="text-accent mt-1">▹</span>
-                            <span>{highlight}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </Card>
-                </div>
-              ))}
-            </div>
+            <ExperienceBubbles
+              items={projects.map(project => ({
+                title: project.title,
+                period: project.period,
+                description: [project.description],
+                technologies: project.technologies,
+                highlights: project.highlights,
+                icon: Code,
+              }))}
+              title="Projects"
+              icon={Code}
+            />
           </section>
 
           {/* Leadership Section */}
           <section className="mb-20">
-            <div className="flex items-center gap-3 mb-8">
-              <Users className="text-accent" size={32} />
-              <h2 className="text-3xl font-bold">Leadership</h2>
-            </div>
-            <Card className="p-6 bg-card border-border hover:border-primary/50 transition-all hover:glow">
-              <div className="flex items-start gap-4">
-                <div className="p-3 bg-accent/10 rounded-lg">
-                  <Award className="text-accent" size={24} />
-                </div>
-                <div className="flex-1">
-                  <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-2">
-                    <h3 className="text-xl font-semibold">{leadership.role}</h3>
-                    <span className="text-sm text-muted-foreground">{leadership.period}</span>
-                  </div>
-                  <p className="text-primary font-medium mb-4">{leadership.title}</p>
-                  <ul className="space-y-2">
-                    {leadership.achievements.map((achievement, i) => (
-                      <li key={i} className="text-sm text-foreground/80 flex items-start gap-2">
-                        <span className="text-accent mt-1">▹</span>
-                        <span>{achievement}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </Card>
+            <ExperienceBubbles
+              items={[{
+                title: leadership.role,
+                subtitle: leadership.title,
+                period: leadership.period,
+                achievements: leadership.achievements,
+                icon: Award,
+              }]}
+              title="Leadership"
+              icon={Users}
+            />
           </section>
         </div>
       </main>
