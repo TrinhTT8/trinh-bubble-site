@@ -18,8 +18,8 @@ All colors MUST be HSL.
     --popover: 240 30% 8%;
     --popover-foreground: 240 5% 96%;
 
-    /* Electric Purple Primary */
-    --primary: 258 90% 66%;
+    /* Electric Navy Blue Primary */
+    --primary: 232 90% 40%;
     --primary-foreground: 240 5% 96%;
     --primary-glow: 258 100% 75%;
 
@@ -57,7 +57,7 @@ All colors MUST be HSL.
     --gradient-glow: radial-gradient(circle at center, hsl(258 90% 66% / 0.2), transparent 70%);
 
     /* Shadows with Glow */
-    --shadow-glow: 0 0 30px hsl(258 90% 66% / 0.3);
+    --shadow-glow: 0 0 30px hsla(207, 86%, 66%, 0.484);
     --shadow-accent-glow: 0 0 30px hsl(188 85% 55% / 0.3);
   }
 }
@@ -147,11 +147,24 @@ All colors MUST be HSL.
     }
   }
 
+  @keyframes color-slide {
+    0% {
+      background-position: 0% 50%;
+    }
+    100% {
+      background-position: 100% 50%;
+    }
+  }
+
   .animate-float {
     animation: float 3s ease-in-out infinite;
   }
 
   .animate-pulse-glow {
     animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  .animate-color-slide {
+    animation: color-slide 2s ease-in-out infinite;
   }
 }

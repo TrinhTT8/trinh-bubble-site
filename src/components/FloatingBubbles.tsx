@@ -32,10 +32,10 @@ const FloatingBubbles = () => {
     // Create bubbles
     const bubbles: Bubble[] = [];
     const colors = [
-      "rgba(139, 92, 246, 0.15)", // Purple
+      "rgba(163, 63, 218, 0.15)", // Purple
       "rgba(99, 102, 241, 0.15)", // Blue
       "rgba(6, 182, 212, 0.15)", // Cyan
-      "rgba(236, 72, 153, 0.15)", // Pink
+      "rgba(189, 50, 143, 0.15)", // Pink
     ];
 
     // Function to add a new bubble
@@ -43,8 +43,8 @@ const FloatingBubbles = () => {
       bubbles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        radius: Math.random() * 100 + 50,
-        vx: (Math.random() - 0.5) * 1.5,
+        radius: Math.random() * 100 + 70,
+        vx: (Math.random() - 0.5) * 3,
         vy: (Math.random() - 0.5) * 1.5,
         color: colors[Math.floor(Math.random() * colors.length)],
         isPopping: false,
@@ -80,27 +80,16 @@ const FloatingBubbles = () => {
       for (let i = bubbles.length - 1; i >= 0; i--) {
         const bubble = bubbles[i];
 
-        if (bubble.isPopping) {
-          bubble.popFrames--;
-          bubble.radius *= 0.9; // Shrink radius
-          if (bubble.popFrames <= 0) {
-            bubbles.splice(i, 1); // Remove bubble after animation
-            // Add a new bubble to maintain count
-            addBubble();
-            continue;
-          }
-        } else {
-          // Update position
-          bubble.x += bubble.vx;
-          bubble.y += bubble.vy;
+        // Update position
+        bubble.x += bubble.vx;
+        bubble.y += bubble.vy;
 
-          // Bounce off edges
-          if (bubble.x + bubble.radius > canvas.width || bubble.x - bubble.radius < 0) {
-            bubble.vx *= -1;
-          }
-          if (bubble.y + bubble.radius > canvas.height || bubble.y - bubble.radius < 0) {
-            bubble.vy *= -1;
-          }
+        // Bounce off edges
+        if (bubble.x + bubble.radius > canvas.width || bubble.x - bubble.radius < 0) {
+          bubble.vx *= -1;
+        }
+        if (bubble.y + bubble.radius > canvas.height || bubble.y - bubble.radius < 0) {
+          bubble.vy *= -1;
         }
 
         // Draw bubble with glow
@@ -134,7 +123,6 @@ const FloatingBubbles = () => {
 
     return () => {
       window.removeEventListener("resize", resizeCanvas);
-      canvas.removeEventListener("click", handleClick);
     };
   }, []);
 
