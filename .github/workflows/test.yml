@@ -111,17 +111,16 @@ jobs:
       - name: "Install Vercel CLI"
         run: npm install -g vercel
 
-      - name: "Pull Vercel environment variables"
-        run: vercel pull --yes --environment=production
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-
       - name: "Build for preview"
         run: npm run build:dev
 
-      - name: "Deploy to Vercel"
-        run: vercel --prod=false --yes
+      - name: "Verify Vercel token"
+        # This step helps diagnose if the token is valid in the runner environment.
+        run: npx vercel whoami --token ${{ secrets.VERCEL_TOKEN }} || true
+
+      - name: "Deploy to Vercel (explicit token)"
+        # Pass the token directly to the CLI to avoid any ENV propagation issues.
+        run: npx vercel --token ${{ secrets.VERCEL_TOKEN }} --confirm --prod=false
         env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
