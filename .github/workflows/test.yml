@@ -114,6 +114,7 @@ jobs:
       - name: "Build for preview"
         run: npm run build:dev
 
+      # Secret keys in github
       - name: "Deploy to Vercel"
         run: vercel --prod=false --yes
         env:
