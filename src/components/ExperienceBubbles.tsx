@@ -14,7 +14,7 @@ interface ExperienceItem {
   company?: string;
   role?: string;
   achievements?: string[];
-  icon: any;
+  icon: React.ComponentType<{ className?: string; size?: number }>;
 }
 
 interface Bubble {
@@ -29,7 +29,7 @@ interface Bubble {
 interface ExperienceBubblesProps {
   items: ExperienceItem[];
   title: string;
-  icon: any;
+  icon: React.ComponentType<{ className?: string; size?: number }>;
 }
 
 const ExperienceBubbles = ({ items, title, icon: Icon }: ExperienceBubblesProps) => {
