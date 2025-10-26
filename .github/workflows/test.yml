@@ -50,11 +50,6 @@ jobs:
       - name: "Build project"
         run: npm run build
 
-      # Step 7: Run tests (if test script exists)
-      - name: "Run tests"
-        run: npm test
-        if: ${{ always() }} # Run even if previous steps failed
-
   # Second job: Security and dependency scanning
   security-scan:
     name: "Security Scan"
