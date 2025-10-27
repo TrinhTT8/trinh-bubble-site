@@ -1,7 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import { Briefcase, GraduationCap, Code, Users, Award } from "lucide-react";
 
 interface ExperienceItem {
   title: string;
@@ -14,156 +13,118 @@ interface ExperienceItem {
   company?: string;
   role?: string;
   achievements?: string[];
-  icon: React.ComponentType<{ className?: string; size?: number }>;
-}
-
-interface Bubble {
-  x: number;
-  y: number;
-  radius: number;
-  item: ExperienceItem;
-  isPopping: boolean;
-  popFrames: number;
+  icon: React.ForwardRefExoticComponent<Omit<React.SVGProps<SVGSVGElement>, "ref"> & {
+    title?: string;
+    titleId?: string;
+  } & React.RefAttributes<SVGSVGElement>>;
 }
 
 interface ExperienceBubblesProps {
   items: ExperienceItem[];
   title: string;
-  icon: React.ComponentType<{ className?: string; size?: number }>;
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement> & { size?: number }>;
+  leadershipItems?: ExperienceItem[];
 }
 
-const ExperienceBubbles = ({ items, title, icon: Icon }: ExperienceBubblesProps) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [bubbles, setBubbles] = useState<Bubble[]>([]);
+const ExperienceBubbles = ({ items, title, icon: Icon, leadershipItems }: ExperienceBubblesProps) => {
   const [selectedItem, setSelectedItem] = useState<ExperienceItem | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [particles, setParticles] = useState<{ id: number; x: number; y: number; vx: number; vy: number }[]>([]);
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+  const handleBubbleClick = (item: ExperienceItem, event: React.MouseEvent<HTMLDivElement>) => {
+    setSelectedItem(item);
+    setIsModalOpen(true);
 
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    // Create particle effect
+    const rect = (event.target as HTMLElement).getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
 
-    // Set canvas size
-    const resizeCanvas = () => {
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
-    };
-    resizeCanvas();
-    window.addEventListener("resize", resizeCanvas);
-
-    // Create bubbles
-    const colors = [
-      "rgba(139, 92, 246, 0.2)", // Purple
-      "rgba(99, 102, 241, 0.2)", // Blue
-      "rgba(6, 182, 212, 0.2)", // Cyan
-      "rgba(236, 72, 153, 0.2)", // Pink
-    ];
-
-    const newBubbles: Bubble[] = items.map((item, index) => ({
-      x: (index % 3 + 1) * (canvas.width / 4),
-      y: (Math.floor(index / 3) + 1) * (canvas.height / 3),
-      radius: 80,
-      item,
-      isPopping: false,
-      popFrames: 0,
+    const newParticles = Array.from({ length: 8 }, (_, i) => ({
+      id: Date.now() + i,
+      x: centerX,
+      y: centerY,
+      vx: (Math.random() - 0.5) * 10,
+      vy: (Math.random() - 0.5) * 10,
     }));
 
-    setBubbles(newBubbles);
+    setParticles(prev => [...prev, ...newParticles]);
 
-    // Handle click to pop bubbles
-    const handleClick = (event: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      const clickX = event.clientX - rect.left;
-      const clickY = event.clientY - rect.top;
+    // Remove particles after animation
+    setTimeout(() => {
+      setParticles(prev => prev.filter(p => !newParticles.find(np => np.id === p.id)));
+    }, 1000);
+  };
 
-      newBubbles.forEach((bubble) => {
-        const distance = Math.sqrt((clickX - bubble.x) ** 2 + (clickY - bubble.y) ** 2);
-        if (distance < bubble.radius && !bubble.isPopping) {
-          bubble.isPopping = true;
-          bubble.popFrames = 10; // Number of frames for popping animation
-          setSelectedItem(bubble.item);
-          setIsModalOpen(true);
-        }
-      });
-    };
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setParticles(prev => prev.map(p => ({
+        ...p,
+        x: p.x + p.vx,
+        y: p.y + p.vy,
+        vy: p.vy + 0.1, // gravity
+      })).filter(p => p.y < window.innerHeight + 100));
+    }, 16);
 
-    canvas.addEventListener("click", handleClick);
+    return () => clearInterval(interval);
+  }, []);
 
-    // Animation loop
-    const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      newBubbles.forEach((bubble) => {
-        if (bubble.isPopping) {
-          bubble.popFrames--;
-          bubble.radius *= 0.9; // Shrink radius
-          if (bubble.popFrames <= 0) {
-            bubble.isPopping = false;
-            bubble.radius = 80; // Reset radius
-          }
-        }
-
-        // Draw bubble with glow
-        const gradient = ctx.createRadialGradient(
-          bubble.x,
-          bubble.y,
-          0,
-          bubble.x,
-          bubble.y,
-          bubble.radius
-        );
-        gradient.addColorStop(0, colors[Math.floor(Math.random() * colors.length)].replace("0.2", "0.4"));
-        gradient.addColorStop(0.5, colors[Math.floor(Math.random() * colors.length)].replace("0.2", "0.2"));
-        gradient.addColorStop(1, colors[Math.floor(Math.random() * colors.length)].replace("0.2", "0"));
-
-        ctx.beginPath();
-        ctx.arc(bubble.x, bubble.y, bubble.radius, 0, Math.PI * 2);
-        ctx.fillStyle = gradient;
-        ctx.fill();
-
-        // Add border glow
-        ctx.strokeStyle = colors[Math.floor(Math.random() * colors.length)].replace("0.2", "0.5");
-        ctx.lineWidth = 2;
-        ctx.stroke();
-
-        // Draw icon and text
-        if (!bubble.isPopping) {
-          const iconSize = 24;
-          const text = bubble.item.title;
-          ctx.fillStyle = "#ffffff";
-          ctx.font = "bold 14px Arial";
-          ctx.textAlign = "center";
-          ctx.fillText(text, bubble.x, bubble.y + iconSize / 2 + 10);
-
-          // Draw icon (simplified, using text for now)
-          ctx.font = `${iconSize}px Arial`;
-          ctx.fillText("●", bubble.x, bubble.y - 10);
-        }
-      });
-
-      requestAnimationFrame(animate);
-    };
-
-    animate();
-
-    return () => {
-      window.removeEventListener("resize", resizeCanvas);
-      canvas.removeEventListener("click", handleClick);
-    };
-  }, [items]);
+  const gradients = [
+    "bg-gradient-to-br from-blue-400/20 to-blue-600/20",
+    "bg-gradient-to-br from-purple-400/20 to-purple-600/20",
+    "bg-gradient-to-br from-green-400/20 to-green-600/20",
+    "bg-gradient-to-br from-blue-400/20 to-purple-600/20",
+    "bg-gradient-to-br from-purple-400/20 to-green-600/20",
+    "bg-gradient-to-br from-green-400/20 to-blue-600/20",
+  ];
 
   return (
     <>
+      {/* Particle Effects */}
+      {particles.map(particle => (
+        <div
+          key={particle.id}
+          className="fixed pointer-events-none w-2 h-2 bg-primary rounded-full opacity-70"
+          style={{
+            left: particle.x,
+            top: particle.y,
+            transform: 'translate(-50%, -50%)',
+          }}
+        />
+      ))}
+
       <div className="flex items-center gap-3 mb-8">
         <Icon className="text-primary" size={32} />
         <h2 className="text-3xl font-bold">{title}</h2>
       </div>
-      <canvas
-        ref={canvasRef}
-        className="w-full h-96 bg-transparent cursor-pointer"
-      />
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {items.map((item, index) => (
+          <div
+            key={index}
+            onClick={(e) => handleBubbleClick(item, e)}
+            className={`
+              ${gradients[index % gradients.length]}
+              relative p-6 rounded-full cursor-pointer transition-all duration-300 ease-in-out
+              hover:scale-110 hover:shadow-lg hover:shadow-primary/25
+              border border-primary/20 hover:border-primary/40
+              flex flex-col items-center justify-center text-center
+              min-h-[120px] group
+            `}
+          >
+            <item.icon className="text-primary mb-2 group-hover:scale-110 transition-transform duration-300" size={24} />
+            <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors duration-300">
+              {item.title}
+            </h3>
+            {item.subtitle && (
+              <p className="text-sm text-muted-foreground mt-1 group-hover:text-primary/80 transition-colors duration-300">
+                {item.subtitle}
+              </p>
+            )}
+          </div>
+        ))}
+      </div>
+
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
@@ -216,17 +177,49 @@ const ExperienceBubbles = ({ items, title, icon: Icon }: ExperienceBubblesProps)
               </div>
             )}
             {selectedItem?.achievements && (
-              <div>
-                <h3 className="font-semibold mb-2">Achievements</h3>
-                <ul className="space-y-2">
-                  {selectedItem.achievements.map((achievement, i) => (
-                    <li key={i} className="text-sm flex items-start gap-2">
-                      <span className="text-accent mt-1">▹</span>
-                      <span>{achievement}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              title === "Leadership" ? (
+                <div>
+                  <h3 className="font-semibold mb-4">Leadership Timeline</h3>
+                  <div className="space-y-6">
+                    {leadershipItems?.map((role, index) => (
+                      <div key={index} className="relative">
+                        {index < leadershipItems.length - 1 && (
+                          <div className="absolute left-4 top-8 w-0.5 h-16 bg-primary/30"></div>
+                        )}
+                        <div className="flex items-start gap-4">
+                          <div className="flex-shrink-0 w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center">
+                            <span className="text-primary font-bold text-sm">{index + 1}</span>
+                          </div>
+                          <div className="flex-1">
+                            <h4 className="font-semibold text-primary">{role.title}</h4>
+                            <p className="text-sm text-muted-foreground mb-2">{role.period}</p>
+                            <ul className="space-y-1">
+                              {role.achievements?.map((achievement, i) => (
+                                <li key={i} className="text-sm flex items-start gap-2">
+                                  <span className="text-accent mt-1">▹</span>
+                                  <span>{achievement}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div>
+                  <h3 className="font-semibold mb-2">Achievements</h3>
+                  <ul className="space-y-2">
+                    {selectedItem.achievements.map((achievement, i) => (
+                      <li key={i} className="text-sm flex items-start gap-2">
+                        <span className="text-accent mt-1">▹</span>
+                        <span>{achievement}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )
             )}
           </div>
         </DialogContent>

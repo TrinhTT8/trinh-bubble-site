@@ -9,7 +9,7 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Navbar />
       <FloatingBubbles />
-      
+
       {/* Hero Section */}
       <main className="relative z-10 min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-4xl mx-auto">

@@ -5,7 +5,6 @@ import { Badge } from "@/components/ui/badge";
 import { Briefcase, GraduationCap, Code, Users, Award } from "lucide-react";
 
 const Experiences = () => {
-
   const skills = {
     languages: ["Python", "JavaScript", "TypeScript", "HTML", "CSS", "C++", "SQL"],
     tools: ["Git/GitLab", "Docker", "Linux", "Jira", "Bitbucket", "Visual Studio"],
@@ -68,15 +67,44 @@ const Experiences = () => {
     },
   ];
 
-  const leadership = {
-    title: "Women in Computing, UNT",
-    role: "President",
-    period: "Jan 2025 – Present",
-    achievements: [
-      "Led 10+ officers to host major STEM events for women in computing",
-      "Launched marketing strategies attracting 30+ new members in one semester",
-      "Mentored officers and fostered collaborative team culture",
-    ],
+  const leadership = [
+    {
+      title: "General Secretary",
+      subtitle: "Women in Computing, UNT",
+      period: "Jan 2024 – Aug 2024",
+      achievements: [
+        "Managed administrative tasks and coordinated club communications",
+        "Organized initial member recruitment events",
+        "Assisted in planning first semester activities",
+      ],
+    },
+    {
+      title: "Vice President",
+      subtitle: "Women in Computing, UNT",
+      period: "Aug 2024 – Dec 2024",
+      achievements: [
+        "Coordinated event planning and logistics for major STEM events",
+        "Managed officer team and delegated responsibilities",
+        "Developed marketing strategies to increase club visibility",
+      ],
+    },
+    {
+      title: "President",
+      subtitle: "Women in Computing, UNT",
+      period: "Jan 2025 – Present",
+      achievements: [
+        "Led 10+ officers to host major STEM events for women in computing",
+        "Launched marketing strategies attracting 30+ new members in one semester",
+        "Mentored officers and fostered collaborative team culture",
+      ],
+    },
+  ];
+
+  const leadershipBubble = {
+    title: "Women in Computing",
+    subtitle: "UNT",
+    period: "Jan 2024 – Present",
+    achievements: [],
   };
 
   return (
@@ -181,14 +209,21 @@ const Experiences = () => {
           <section className="mb-20">
             <ExperienceBubbles
               items={[{
-                title: leadership.role,
-                subtitle: leadership.title,
-                period: leadership.period,
-                achievements: leadership.achievements,
-                icon: Award,
+                title: leadershipBubble.title,
+                subtitle: leadershipBubble.subtitle,
+                period: leadershipBubble.period,
+                achievements: leadershipBubble.achievements,
+                icon: Users,
               }]}
               title="Leadership"
               icon={Users}
+              leadershipItems={leadership.map(role => ({
+                title: role.title,
+                subtitle: role.subtitle,
+                period: role.period,
+                achievements: role.achievements,
+                icon: Users,
+              }))}
             />
           </section>
         </div>
