@@ -22,7 +22,7 @@ interface ExperienceItem {
 interface ExperienceBubblesProps {
   items: ExperienceItem[];
   title: string;
-  icon: React.ComponentType<any>;
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement> & { size?: number }>;
   leadershipItems?: ExperienceItem[];
 }
 
