@@ -15,6 +15,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ["Inter", "sans-serif"],
+        journal: ["Caveat", "cursive"],
       },
       colors: {
         border: "hsl(var(--border))",
