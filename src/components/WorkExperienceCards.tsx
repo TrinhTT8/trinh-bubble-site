@@ -6,7 +6,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { Calendar, MapPin, ImageIcon, BookOpen } from "lucide-react";
+import { Calendar, MapPin, ImageIcon, BookOpen, SearchX } from "lucide-react";
 
 export interface WorkExperienceItem {
   company: string;
@@ -22,6 +22,8 @@ export interface WorkExperienceItem {
   >;
   /** Optional photo for the postcard. Leave undefined to show a placeholder cover. */
   image?: string;
+  /** Skills used here — must match a skill name in the Technical Skills sidebar to be filterable. */
+  technologies?: string[];
 }
 
 interface WorkExperienceCardsProps {
@@ -43,6 +45,15 @@ const WorkExperienceCards = ({ items }: WorkExperienceCardsProps) => {
     setSelectedItem(item);
     setIsOpen(true);
   };
+
+  if (items.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center text-center py-16 text-muted-foreground">
+        <SearchX size={36} className="mb-3 opacity-50" />
+        <p className="text-sm">No work experience uses that skill yet.</p>
+      </div>
+    );
+  }
 
   return (
     <>
