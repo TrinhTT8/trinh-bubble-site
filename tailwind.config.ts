@@ -15,7 +15,6 @@ export default {
     extend: {
       fontFamily: {
         sans: ["Inter", "sans-serif"],
-        journal: ["Caveat", "cursive"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -120,6 +119,27 @@ export default {
             transform: "translateY(0)",
           },
         },
+        "seal-dance": {
+          "0%, 100%": {
+            transform: "translateY(0) rotate(-8deg)",
+          },
+          "50%": {
+            transform: "translateY(-14px) rotate(8deg)",
+          },
+        },
+        "float-note": {
+          "0%": {
+            transform: "translateY(0) scale(0.8)",
+            opacity: "0",
+          },
+          "20%": {
+            opacity: "1",
+          },
+          "100%": {
+            transform: "translateY(-40px) scale(1.1)",
+            opacity: "0",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -128,6 +148,8 @@ export default {
         float: "float 3s ease-in-out infinite",
         "pulse-glow": "pulse-glow 2s ease-in-out infinite",
         "fade-in-up": "fade-in-up 0.6s ease-out",
+        "seal-dance": "seal-dance 0.6s ease-in-out infinite",
+        "float-note": "float-note 2.5s ease-in-out infinite",
       },
     },
   },

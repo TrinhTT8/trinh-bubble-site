@@ -17,16 +17,21 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import ProjectHologram, { type HologramShape } from "@/components/ProjectHologram";
-import { Github, Calendar, Sparkles, SearchX } from "lucide-react";
+import { Github, Calendar, Sparkles, SearchX, Trophy, ExternalLink } from "lucide-react";
 
 export interface ProjectItem {
   title: string;
-  period: string;
+  /** Leave undefined if there's no date/label to show yet. */
+  period?: string;
   description: string;
   technologies: string[];
   highlights: string[];
   /** Leave undefined until a repo is public/ready to share. */
   githubUrl?: string;
+  /** Leave undefined until there's a live/deployed version to link to. */
+  liveUrl?: string;
+  /** Set to true to show a "Hackathon Winner" ribbon across the card's corner. */
+  hackathonWinner?: boolean;
 }
 
 interface ProjectsCarouselProps {
@@ -69,15 +74,28 @@ const ProjectsCarousel = ({ items }: ProjectsCarouselProps) => {
 
   return (
     <>
-      <div className="max-w-2xl mx-auto px-4 sm:px-16">
-        <Carousel setApi={setApi} opts={{ loop: true }}>
+      <div className="max-w-5xl mx-auto px-6 sm:px-20">
+        <Carousel setApi={setApi} opts={{ loop: true, align: "start" }}>
           <CarouselContent>
             {items.map((item, index) => {
               const shape = shapes[index % shapes.length];
               const color = colors[index % colors.length];
               return (
-                <CarouselItem key={item.title}>
-                  <div className="relative rounded-2xl border border-primary/20 bg-gradient-to-b from-card to-background overflow-hidden">
+                <CarouselItem key={item.title} className={items.length > 1 ? "md:basis-1/2" : undefined}>
+                  <div
+                    className={`relative rounded-2xl border border-primary/20 bg-gradient-to-b from-card to-background overflow-hidden ${
+                      items.length === 1 ? "max-w-2xl mx-auto" : ""
+                    }`}
+                  >
+                    {item.hackathonWinner && (
+                      <div className="absolute top-0 left-0 w-32 h-32 overflow-hidden pointer-events-none z-10">
+                        <div className="absolute top-[22px] left-[-40px] w-[170px] -rotate-45 bg-gradient-to-r from-primary to-accent text-primary-foreground text-[10px] font-bold uppercase tracking-wider text-center py-1 shadow-lg flex items-center justify-center gap-1">
+                          <Trophy size={11} />
+                          Hackathon Winner
+                        </div>
+                      </div>
+                    )}
+
                     <div
                       className="h-80 sm:h-[28rem] cursor-grab active:cursor-grabbing"
                       style={{
@@ -92,10 +110,12 @@ const ProjectsCarousel = ({ items }: ProjectsCarouselProps) => {
                       onClick={() => handleOpen(item)}
                       className="group w-full text-left p-6 pt-4 border-t border-primary/10 hover:bg-primary/5 transition-colors duration-300"
                     >
-                      <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1">
-                        <Calendar size={12} />
-                        {item.period}
-                      </div>
+                      {item.period && (
+                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1">
+                          <Calendar size={12} />
+                          {item.period}
+                        </div>
+                      )}
                       <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors duration-300">
                         {item.title}
                       </h3>
@@ -109,33 +129,41 @@ const ProjectsCarousel = ({ items }: ProjectsCarouselProps) => {
               );
             })}
           </CarouselContent>
-          <CarouselPrevious className="left-0 sm:-left-2" />
-          <CarouselNext className="right-0 sm:-right-2" />
+          {items.length > 1 && (
+            <>
+              <CarouselPrevious className="-left-4 sm:-left-16" />
+              <CarouselNext className="-right-4 sm:-right-16" />
+            </>
+          )}
         </Carousel>
 
         {/* Progress dots */}
-        <div className="flex items-center justify-center gap-2 mt-6">
-          {items.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => api?.scrollTo(index)}
-              aria-label={`Go to project ${index + 1}`}
-              className={`h-2 rounded-full transition-all duration-300 ${
-                index === current ? "w-6 bg-primary" : "w-2 bg-primary/30 hover:bg-primary/50"
-              }`}
-            />
-          ))}
-        </div>
+        {items.length > 1 && (
+          <div className="flex items-center justify-center gap-2 mt-6">
+            {items.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => api?.scrollTo(index)}
+                aria-label={`Go to project ${index + 1}`}
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  index === current ? "w-6 bg-primary" : "w-2 bg-primary/30 hover:bg-primary/50"
+                }`}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="max-w-xl">
           <DialogHeader>
             <DialogTitle>{selectedItem?.title}</DialogTitle>
-            <DialogDescription className="flex items-center gap-1.5">
-              <Calendar size={13} />
-              {selectedItem?.period}
-            </DialogDescription>
+            {selectedItem?.period && (
+              <DialogDescription className="flex items-center gap-1.5">
+                <Calendar size={13} />
+                {selectedItem.period}
+              </DialogDescription>
+            )}
           </DialogHeader>
 
           <div className="space-y-4">
@@ -170,7 +198,7 @@ const ProjectsCarousel = ({ items }: ProjectsCarouselProps) => {
               </div>
             )}
 
-            <div className="pt-2">
+            <div className="pt-2 flex flex-wrap gap-3">
               {selectedItem?.githubUrl ? (
                 <a href={selectedItem.githubUrl} target="_blank" rel="noopener noreferrer">
                   <Button className="gap-2">
@@ -183,6 +211,15 @@ const ProjectsCarousel = ({ items }: ProjectsCarouselProps) => {
                   <Github size={16} />
                   GitHub link coming soon
                 </Button>
+              )}
+
+              {selectedItem?.liveUrl && (
+                <a href={selectedItem.liveUrl} target="_blank" rel="noopener noreferrer">
+                  <Button variant="outline" className="gap-2 border-accent/40 text-accent hover:bg-accent/10">
+                    <ExternalLink size={16} />
+                    View Live
+                  </Button>
+                </a>
               )}
             </div>
           </div>

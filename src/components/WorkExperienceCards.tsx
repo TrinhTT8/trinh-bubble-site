@@ -6,6 +6,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import { Badge } from "@/components/ui/badge";
 import { Calendar, MapPin, ImageIcon, BookOpen, SearchX } from "lucide-react";
 
 export interface WorkExperienceItem {
@@ -126,38 +127,35 @@ const WorkExperienceCards = ({ items }: WorkExperienceCardsProps) => {
       </div>
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent
-          className="max-w-2xl p-0 overflow-hidden bg-[#fdfaf3] dark:bg-[#211d17] text-[#2b2620] dark:text-[#ece5d8] border-[#e4dcc8] dark:border-[#3a3327]"
-        >
-          {/* Ruled-paper texture + notebook margin */}
+        <DialogContent className="max-w-4xl p-0 overflow-hidden bg-card border-primary/20 shadow-2xl shadow-primary/10">
+          {/* Faint circuit-grid texture, matching the hologram/futuristic motif used elsewhere */}
           <div
-            className="relative max-h-[80vh] overflow-y-auto p-8 pl-12"
+            className="relative max-h-[85vh] overflow-y-auto p-8 sm:p-10"
             style={{
               backgroundImage:
-                "repeating-linear-gradient(transparent, transparent 31px, rgba(120,105,70,0.18) 32px)",
-              backgroundPositionY: "4px",
+                "repeating-linear-gradient(0deg, hsl(var(--primary) / 0.05) 0px, hsl(var(--primary) / 0.05) 1px, transparent 1px, transparent 3px), radial-gradient(circle at top right, hsl(var(--accent) / 0.1), transparent 60%)",
             }}
           >
-            <div className="absolute left-8 top-0 bottom-0 w-px bg-red-400/30" />
-
             {selectedItem && (
               <>
                 {selectedItem.image && (
                   <img
                     src={selectedItem.image}
                     alt={`${selectedItem.role} at ${selectedItem.company}`}
-                    className="w-full h-48 object-cover rounded-md mb-6 shadow-md -rotate-1"
+                    className="w-full h-56 sm:h-72 object-cover rounded-xl mb-8 ring-1 ring-primary/20 shadow-lg"
                   />
                 )}
 
-                <DialogHeader className="mb-4">
-                  <DialogTitle className="flex items-center gap-2 font-journal text-4xl font-semibold text-inherit">
-                    <selectedItem.icon className="text-primary shrink-0" size={28} />
-                    {selectedItem.role}
+                <DialogHeader className="mb-6">
+                  <DialogTitle className="flex items-center gap-3 text-2xl sm:text-3xl font-bold">
+                    <span className="flex items-center justify-center w-11 h-11 rounded-xl bg-primary/10 border border-primary/20 shrink-0">
+                      <selectedItem.icon className="text-primary" size={22} />
+                    </span>
+                    <span className="gradient-text">{selectedItem.role}</span>
                   </DialogTitle>
                   <DialogDescription asChild>
-                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-[#5c5340] dark:text-[#b8ae98]">
-                      <span className="font-medium text-primary">{selectedItem.company}</span>
+                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-muted-foreground mt-1">
+                      <span className="font-medium text-accent">{selectedItem.company}</span>
                       <span className="flex items-center gap-1">
                         <Calendar size={13} />
                         {selectedItem.period}
@@ -170,14 +168,30 @@ const WorkExperienceCards = ({ items }: WorkExperienceCardsProps) => {
                   </DialogDescription>
                 </DialogHeader>
 
-                <div className="space-y-3 font-journal text-xl leading-relaxed">
+                <div className="relative pl-6 space-y-3 text-sm sm:text-base leading-relaxed">
+                  <div className="absolute left-0 top-1 bottom-1 w-px bg-gradient-to-b from-primary via-accent to-transparent" />
                   {selectedItem.description.map((line, i) => (
-                    <p key={i} className="flex gap-2">
-                      <span className="text-primary">—</span>
+                    <p key={i} className="flex gap-2.5 text-foreground/90">
+                      <span className="text-accent mt-0.5 shrink-0">▹</span>
                       <span>{line}</span>
                     </p>
                   ))}
                 </div>
+
+                {selectedItem.technologies && selectedItem.technologies.length > 0 && (
+                  <div className="mt-8 pt-6 border-t border-border">
+                    <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-3">
+                      Skills used
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedItem.technologies.map((tech) => (
+                        <Badge key={tech} className="bg-primary/10 text-primary border-primary/30">
+                          {tech}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </>
             )}
           </div>
