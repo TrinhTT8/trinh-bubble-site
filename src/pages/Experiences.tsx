@@ -1,9 +1,9 @@
 import { lazy, Suspense, useState } from "react";
 import Navbar from "@/components/Navbar";
 import FloatingBubbles from "@/components/FloatingBubbles";
-import ExperienceBubbles from "@/components/ExperienceBubbles";
 import WorkExperienceCards, { type WorkExperienceItem } from "@/components/WorkExperienceCards";
 import type { ProjectItem } from "@/components/ProjectsCarousel";
+import LeadershipJourney, { type LeadershipOrg, type MembershipItem } from "@/components/LeadershipJourney";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Briefcase,
@@ -78,7 +78,7 @@ const Experiences = () => {
       "Web Speech API",
       "Presage",
     ],
-    design: ["Figma", "Adobe XD", "Photoshop", "Visily", "Figma Make"],
+    design: ["Figma", "Photoshop", "Visily", "Figma Make"],
     methodologies: ["Agile", "Waterfall", "CI/CD", "OOP", "System Design"],
   };
 
@@ -106,7 +106,23 @@ const Experiences = () => {
         "Collaborated with backend teams to integrate APIs and automate CI/CD pipelines",
       ],
       icon: Briefcase,
-      technologies: ["Angular", "Agile", "CI/CD"],
+      technologies: ["Angular", "Python", "Typescript", "CSS", "HTML", "Linux", "Jira", "Bitbucket", "Visual Studio", "Agile", "CI/CD"],
+      image: "/DTCC.png"
+    },
+    {
+      company: "Wize Computing Academy",
+      role: "Teacher Assistant",
+      location: "Dallas, TX",
+      period: "Jan 2026 – Present",
+      description: [
+        "Teach coding and robotics fundamentals to 50+ K-12 students across multiple classes, some with 15+ students each, using Scratch, Python, LEGO robotics kits, Minecraft, and Roblox Studio.",
+        "Adapt lessons across age groups and skill levels, provide one-on-one troubleshooting support, and manage group instruction for larger classes while building students' confidence in STEM.",
+      ],
+      icon: GraduationCap,
+      // Assuming Python here since it's the de facto language for this kind of ML work —
+      // adjust/remove if that wasn't actually the language used.
+      technologies: ["Python", "Visual Studio"],
+      image: "/Wize.png"
     },
     {
       company: "National Science Foundation (NSF)",
@@ -122,7 +138,8 @@ const Experiences = () => {
       // Assuming Python here since it's the de facto language for this kind of ML work —
       // adjust/remove if that wasn't actually the language used.
       technologies: ["Python"],
-    },
+      image: "/NSF.png"
+    }
   ];
 
   // Tip: add a `githubUrl: "https://github.com/..."` field to any entry below
@@ -131,7 +148,6 @@ const Experiences = () => {
   const projects: ProjectItem[] = [
     {
       title: "No Treble",
-      period: "Jan – Jun 2025",
       description:
         "Led frontend design and development for an accessible learning app for visually impaired students, collaborating with a team of 6",
       technologies: ["React.js", "Bootstrap", "Firebase", "Docker", "CI/CD"],
@@ -143,7 +159,6 @@ const Experiences = () => {
     },
     {
       title: "Mean Green Lyft",
-      period: "Aug – Jan 2023",
       description:
         "Designed a large-scale C++ application simulating ride-sharing operations with OOP principles",
       technologies: ["C++", "OOP", "System Design"],
@@ -157,26 +172,27 @@ const Experiences = () => {
       // TODO: add real dates and a couple of highlight bullets once you have them —
       // this description is just a factual restatement of the stack you gave me.
       title: "Nest Guard",
-      period: "Add dates",
+      period: "WEHack 2026 Winner",
       description:
         "Built with React, Vite, and Tailwind CSS on the frontend, a Python FastAPI backend, and the Gemini API, deployed on Vultr and Vercel.",
       technologies: ["React.js", "Vite", "Tailwind CSS", "Framer Motion", "Python", "FastAPI", "Gemini API", "Vultr", "Vercel"],
       highlights: [],
       githubUrl: "https://github.com/TrinhTT8/nest-guard",
+      hackathonWinner: true,
     },
     {
       // TODO: add real dates, a github link (if public), and a couple of highlight bullets.
       title: "PosiSense",
-      period: "Add dates",
+      period: "HackAI 2026 Winner",
       description:
         "Built using Presage and the Web Speech API, designed with Figma Make, with a React and Tailwind CSS frontend backed by MongoDB Atlas.",
       technologies: ["Presage", "Web Speech API", "Figma Make", "React.js", "Tailwind CSS", "MongoDB Atlas"],
       highlights: [],
+      hackathonWinner: true,
     },
     {
-      // TODO: add real dates and a github link (if public).
+      // TODO: add a period/date label and a github link (if public) once you have them.
       title: "Magnify CRM",
-      period: "Add dates",
       description: "Customer Relationship Management Platform",
       technologies: ["Angular", "Python", "Google Cloud Storage"],
       highlights: [
@@ -188,45 +204,46 @@ const Experiences = () => {
     },
   ];
 
-  const leadership = [
+  const leadershipProgressions: LeadershipOrg[] = [
     {
-      title: "General Secretary",
-      subtitle: "Women in Computing, UNT",
-      period: "Jan 2024 – Aug 2024",
-      achievements: [
-        "Managed administrative tasks and coordinated club communications",
-        "Organized initial member recruitment events",
-        "Assisted in planning first semester activities",
-      ],
-    },
-    {
-      title: "Vice President",
-      subtitle: "Women in Computing, UNT",
-      period: "Aug 2024 – Dec 2024",
-      achievements: [
-        "Coordinated event planning and logistics for major STEM events",
-        "Managed officer team and delegated responsibilities",
-        "Developed marketing strategies to increase club visibility",
-      ],
-    },
-    {
-      title: "President",
-      subtitle: "Women in Computing, UNT",
-      period: "Jan 2025 – Present",
-      achievements: [
-        "Led 10+ officers to host major STEM events for women in computing",
-        "Launched marketing strategies attracting 30+ new members in one semester",
-        "Mentored officers and fostered collaborative team culture",
+      organization: "Women in Computing, UNT",
+      subtitle: "Jan 2024 – Present",
+      roles: [
+        {
+          title: "General Secretary",
+          period: "Jan 2024 – Aug 2024",
+          achievements: [
+            "Managed administrative tasks and coordinated club communications",
+            "Organized initial member recruitment events",
+            "Assisted in planning first semester activities",
+          ],
+        },
+        {
+          title: "Vice President",
+          period: "Aug 2024 – Dec 2024",
+          achievements: [
+            "Coordinated event planning and logistics for major STEM events",
+            "Managed officer team and delegated responsibilities",
+            "Developed marketing strategies to increase club visibility",
+          ],
+        },
+        {
+          title: "President",
+          period: "Jan 2025 – Present",
+          achievements: [
+            "Led 10+ officers to host major STEM events for women in computing",
+            "Launched marketing strategies attracting 30+ new members in one semester",
+            "Mentored officers and fostered collaborative team culture",
+          ],
+        },
       ],
     },
   ];
 
-  const leadershipBubble = {
-    title: "Women in Computing",
-    subtitle: "UNT",
-    period: "Jan 2024 – Present",
-    achievements: [],
-  };
+  // Tip: add a `period` here (e.g. "Since Fall 2024") once you have one.
+  const leadershipMemberships: MembershipItem[] = [
+    { organization: "Society of Women Engineers", role: "Member" },
+  ];
 
   const filteredWorkExperience = selectedSkill
     ? workExperience.filter((exp) => exp.technologies?.includes(selectedSkill))
@@ -241,8 +258,8 @@ const Experiences = () => {
       <Navbar />
       <FloatingBubbles />
 
-      <main className="relative z-10 pt-24 pb-16 px-4 sm:px-6 lg:px-8">
-        <div className="container mx-auto max-w-6xl">
+      <main className="relative z-10 pt-24 pb-16 px-2.5">
+        <div className="w-full">
           {/* Header */}
           <div className="text-center mb-16">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold gradient-text mb-4">
@@ -257,10 +274,7 @@ const Experiences = () => {
             {/* Skills Sidebar */}
             <aside className="bg-card/50 border border-border rounded-xl p-5 lg:sticky lg:top-28 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto">
               <div className="flex items-center justify-between mb-1">
-                <div className="flex items-center gap-2">
-                  <Code className="text-primary" size={20} />
-                  <h2 className="text-lg font-bold">Technical Skills</h2>
-                </div>
+                <h2 className="text-lg font-bold">Technical Skills</h2>
                 {selectedSkill && (
                   <button
                     onClick={() => setSelectedSkill(null)}
@@ -371,24 +385,11 @@ const Experiences = () => {
 
                 {/* Leadership Section */}
                 <TabsContent value="leadership">
-                  <ExperienceBubbles
-                    items={[{
-                      title: leadershipBubble.title,
-                      subtitle: leadershipBubble.subtitle,
-                      period: leadershipBubble.period,
-                      achievements: leadershipBubble.achievements,
-                      icon: Users,
-                    }]}
-                    title="Leadership"
-                    icon={Users}
-                    leadershipItems={leadership.map(role => ({
-                      title: role.title,
-                      subtitle: role.subtitle,
-                      period: role.period,
-                      achievements: role.achievements,
-                      icon: Users,
-                    }))}
-                  />
+                  <div className="flex items-center gap-3 mb-8">
+                    <Users className="text-primary" size={32} />
+                    <h2 className="text-3xl font-bold">Leadership</h2>
+                  </div>
+                  <LeadershipJourney progressions={leadershipProgressions} memberships={leadershipMemberships} />
                 </TabsContent>
               </Tabs>
             </div>
