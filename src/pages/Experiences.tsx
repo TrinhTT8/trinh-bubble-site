@@ -96,7 +96,7 @@ const Experiences = () => {
   const workExperience: WorkExperienceItem[] = [
     {
       company: "Depository of Trust & Clearing Corporation (DTCC)",
-      role: "IT Intern",
+      role: "Software Engineer - EDGE Rotational Program",
       location: "Dallas, TX",
       period: "Jun 2025 – Present",
       description: [
@@ -149,45 +149,57 @@ const Experiences = () => {
     {
       title: "No Treble",
       description:
-        "Led frontend design and development for an accessible learning app for visually impaired students, collaborating with a team of 6",
+        "An accessible music-learning web app for visually impaired musicians, with screen-reader-friendly sheet music tools, ear-training exercises, and music theory lessons that emphasize sound over visual notation. Led frontend design and development, collaborating with a team of 6.",
       technologies: ["React.js", "Bootstrap", "Firebase", "Docker", "CI/CD"],
       highlights: [
         "Translated insights from 10+ user interviews into 20+ interactive prototypes",
         "Integrated text-to-speech functionality for accessibility",
         "Implemented CI/CD pipelines improving deployment efficiency by 25%",
+        "Built a sheet music suite for composing, loading, and editing scores, plus a community forum where users can post and filter by tag",
       ],
+      githubUrl: "https://github.com/NekoTops/NoTreble",
     },
     {
       title: "Mean Green Lyft",
       description:
-        "Designed a large-scale C++ application simulating ride-sharing operations with OOP principles",
+        "A UNT-themed ride-booking system modeled after Uber/Lyft, connecting customers and drivers through a large-scale C++ application built with OOP principles.",
       technologies: ["C++", "OOP", "System Design"],
       highlights: [
         "Integrated authentication, scheduling, and real-time matching modules",
         "Optimized cross-module communication for improved stability",
         "Built modular architecture for future GPS integration",
       ],
+      githubUrl: "https://github.com/TrinhTT8/Mean-Green-Lyft",
     },
     {
-      // TODO: add real dates and a couple of highlight bullets once you have them —
-      // this description is just a factual restatement of the stack you gave me.
+      // TODO: add real dates once you have them.
       title: "Nest Guard",
       period: "WEHack 2026 Winner",
       description:
-        "Built with React, Vite, and Tailwind CSS on the frontend, a Python FastAPI backend, and the Gemini API, deployed on Vultr and Vercel.",
+        "AI-powered homeowner risk assessment tool that gives users a personalized risk score (0-100) and a ranked action plan in under 2 minutes, breaking risk down across Home Condition, Natural Disaster, Neighborhood, Security, and Liability.",
       technologies: ["React.js", "Vite", "Tailwind CSS", "Framer Motion", "Python", "FastAPI", "Gemini API", "Vultr", "Vercel"],
-      highlights: [],
+      highlights: [
+        "Risk-scoring engine (XGBoost + SHAP) with an interactive dashboard and per-category detail views",
+        "AI-powered event classification with FEMA data integration",
+        "Personalized, ranked tips to reduce risk and insurance costs",
+      ],
       githubUrl: "https://github.com/TrinhTT8/nest-guard",
+      liveUrl: "https://nest-guard.vercel.app",
       hackathonWinner: true,
     },
     {
-      // TODO: add real dates, a github link (if public), and a couple of highlight bullets.
+      // TODO: add real dates once you have them.
       title: "PosiSense",
       period: "HackAI 2026 Winner",
       description:
-        "Built using Presage and the Web Speech API, designed with Figma Make, with a React and Tailwind CSS frontend backed by MongoDB Atlas.",
+        "Real-time AI interview coach that tracks behavioral signals — blinks, talking, composure — during mock interviews via the Presage SmartSpectra sensing SDK, giving live feedback and a post-session scorecard.",
       technologies: ["Presage", "Web Speech API", "Figma Make", "React.js", "Tailwind CSS", "MongoDB Atlas"],
-      highlights: [],
+      highlights: [
+        "Runs standalone in the browser with a realistic behavioral simulation — no camera/hardware setup required",
+        "Optional full C++ Presage integration for real blink, talking, and nervousness detection via webcam",
+        "React + Vite frontend paired with a Node.js backend",
+      ],
+      githubUrl: "https://github.com/TrinhTT8/posi-sense",
       hackathonWinner: true,
     },
     {

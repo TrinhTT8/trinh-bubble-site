@@ -1,29 +1,10 @@
-import { useState } from "react";
 import Navbar from "@/components/Navbar";
+import FloatingBubbles from "@/components/FloatingBubbles";
 import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
-import { Mail, Phone, MapPin, Github, Linkedin, Send } from "lucide-react";
+import DancingSeals from "@/components/DancingSeals";
+import { Mail, Phone, Github, Linkedin } from "lucide-react";
 
 const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // In a real application, you would send this to a backend
-    toast.success("Message sent! I'll get back to you soon.", {
-      description: "Thank you for reaching out!",
-    });
-    setFormData({ name: "", email: "", message: "" });
-  };
-
   const contactInfo = [
     {
       icon: Mail,
@@ -36,12 +17,6 @@ const Contact = () => {
       label: "Phone",
       value: "(940) 367-8585",
       href: "tel:9403678585",
-    },
-    {
-      icon: MapPin,
-      label: "Location",
-      value: "Denton, TX",
-      href: null,
     },
   ];
 
@@ -61,11 +36,12 @@ const Contact = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
+      <FloatingBubbles />
 
-      <main className="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
+      <main className="relative z-10 pt-24 pb-16 px-4 sm:px-6 lg:px-8">
         <div className="container mx-auto max-w-6xl">
           {/* Header */}
-          <div className="text-center mb-16">
+          <div className="text-center mb-10">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold gradient-text mb-4">
               Let's Connect
             </h1>
@@ -74,52 +50,22 @@ const Contact = () => {
             </p>
           </div>
 
+          {/* Currently Available */}
+          <Card className="p-8 mb-16 bg-gradient-to-br from-primary/10 to-accent/10 border-border">
+            <h3 className="text-xl font-bold mb-3">Currently Available</h3>
+            <p className="text-foreground/80">
+              I'm actively seeking for full-time opportunities in software engineering,
+              frontend development, and machine learning. Let's build something amazing together!
+            </p>
+          </Card>
+
           <div className="grid lg:grid-cols-2 gap-12">
-            {/* Contact Form */}
-            <Card className="p-8 bg-card border-border hover:border-primary/50 transition-colors">
-              <h2 className="text-2xl font-bold mb-6">Send a Message</h2>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="space-y-2">
-                  <Label htmlFor="name">Name</Label>
-                  <Input
-                    id="name"
-                    type="text"
-                    placeholder="Your name"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    required
-                    className="bg-background border-border focus:border-primary"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="your.email@example.com"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    required
-                    className="bg-background border-border focus:border-primary"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="message">Message</Label>
-                  <Textarea
-                    id="message"
-                    placeholder="Tell me about your project or question..."
-                    value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    required
-                    rows={6}
-                    className="bg-background border-border focus:border-primary resize-none"
-                  />
-                </div>
-                <Button type="submit" size="lg" className="w-full bg-primary hover:bg-primary/90 glow">
-                  <Send className="mr-2" size={18} />
-                  Send Message
-                </Button>
-              </form>
+            {/* Contact Form (placeholder until it's wired up to actually send) */}
+            <Card className="p-8 bg-card border-border hover:border-primary/50 transition-colors flex flex-col items-center justify-center text-center">
+              <p className="text-foreground/80 mb-8">
+                More features coming soon — but for now, feel free to enjoy the dancing seals.
+              </p>
+              <DancingSeals />
             </Card>
 
             {/* Contact Information */}
@@ -174,14 +120,6 @@ const Contact = () => {
                 <p className="text-sm text-muted-foreground mt-6">
                   Feel free to connect with me on social media. I'm always open to discussing new projects,
                   creative ideas, or opportunities to be part of your vision.
-                </p>
-              </Card>
-
-              <Card className="p-8 bg-gradient-to-br from-primary/10 to-accent/10 border-border">
-                <h3 className="text-xl font-bold mb-3">Currently Available</h3>
-                <p className="text-foreground/80">
-                  I'm actively seeking internship and full-time opportunities in software engineering, 
-                  frontend development, and machine learning. Let's build something amazing together!
                 </p>
               </Card>
             </div>

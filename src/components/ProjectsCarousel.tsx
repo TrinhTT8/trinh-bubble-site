@@ -17,7 +17,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import ProjectHologram, { type HologramShape } from "@/components/ProjectHologram";
-import { Github, Calendar, Sparkles, SearchX, Trophy } from "lucide-react";
+import { Github, Calendar, Sparkles, SearchX, Trophy, ExternalLink } from "lucide-react";
 
 export interface ProjectItem {
   title: string;
@@ -28,6 +28,8 @@ export interface ProjectItem {
   highlights: string[];
   /** Leave undefined until a repo is public/ready to share. */
   githubUrl?: string;
+  /** Leave undefined until there's a live/deployed version to link to. */
+  liveUrl?: string;
   /** Set to true to show a "Hackathon Winner" ribbon across the card's corner. */
   hackathonWinner?: boolean;
 }
@@ -196,7 +198,7 @@ const ProjectsCarousel = ({ items }: ProjectsCarouselProps) => {
               </div>
             )}
 
-            <div className="pt-2">
+            <div className="pt-2 flex flex-wrap gap-3">
               {selectedItem?.githubUrl ? (
                 <a href={selectedItem.githubUrl} target="_blank" rel="noopener noreferrer">
                   <Button className="gap-2">
@@ -209,6 +211,15 @@ const ProjectsCarousel = ({ items }: ProjectsCarouselProps) => {
                   <Github size={16} />
                   GitHub link coming soon
                 </Button>
+              )}
+
+              {selectedItem?.liveUrl && (
+                <a href={selectedItem.liveUrl} target="_blank" rel="noopener noreferrer">
+                  <Button variant="outline" className="gap-2 border-accent/40 text-accent hover:bg-accent/10">
+                    <ExternalLink size={16} />
+                    View Live
+                  </Button>
+                </a>
               )}
             </div>
           </div>
